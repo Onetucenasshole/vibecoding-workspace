@@ -32,6 +32,8 @@ igotowatchmovies-v1.8.2
 
 ## 5. 路径
 
+> ⚠️ **换电脑时必须重新确认以下路径，不可沿用旧路径。**
+
 | 用途 | 路径 |
 |------|------|
 | 插件源文件 | `C:\Users\Administrator\Desktop\同步插件更新程序\igotowatchmovies-v1.4.2\igotowatchmovies-v1.4.2\` |
@@ -39,3 +41,9 @@ igotowatchmovies-v1.8.2
 | 插件子目录 | `igotowatchmovies/` |
 | GitHub | `https://github.com/Onetucenasshole/vibecoding-workspace` |
 | 分支 | `master` |
+
+**换电脑流程：**
+1. 确认插件源文件新路径
+2. 确认 Git 仓库新路径
+3. 更新本文件和 WorkBuddy skill 中的路径
+4. 验证路径存在后再操作
