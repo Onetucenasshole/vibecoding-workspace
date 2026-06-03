@@ -64,15 +64,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     tabPanels: document.querySelectorAll('.tab-panel'),
     scanListBtn: document.getElementById('scanListBtn'),
     startBatchBtn: document.getElementById('startBatchBtn'),
-    scanResult: document.getElementById('scanResult'),
-    batchProgress: document.getElementById('batchProgress'),
+    scanResultCard: document.getElementById('scanResultCard'),
+    scanCardHeader: document.getElementById('scanCardHeader'),
+    scanCardBody: document.getElementById('scanCardBody'),
+    syncProgressBar: document.getElementById('syncProgressBar'),
     batchResults: document.getElementById('batchResults'),
     progressFill: document.getElementById('progressFill'),
     progressText: document.getElementById('progressText'),
     resultsSummary: document.getElementById('resultsSummary'),
-    resultsList: document.getElementById('resultsList'),
     equalStrategy: document.getElementById('equalStrategy'),
-    batchStepRun: document.getElementById('batch-step-run'),
     completenessFields: document.getElementById('completenessFields')
   };
 
@@ -762,23 +762,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageType: statusLabel
       }));
 
-      let html = `<div class="scan-success"><strong>📋 发现 ${scannedItems.length} 个条目</strong>`;
-      html += `<span class="scan-hint" style="margin-left:8px;color:#3370ff;"> 状态: ${statusLabel}</span>`;
-      html += '</div>';
+      let itemsHtml = '';
+      scannedItems.forEach(item => {
+        const emoji = item.type === 'book' ? '📚' : '🎬';
+        itemsHtml += `<div class="scan-item">${emoji} ${item.title.substring(0, 30)}</div>`;
+      });
+
+      ui.scanCardHeader.innerHTML = `📋 发现 ${scannedItems.length} 个条目 · 状态: ${statusLabel}`;
+      ui.scanCardBody.innerHTML = itemsHtml;
+      ui.scanResultCard.style.display = 'flex';
 
       if (scannedItems.length > 0) {
-        html += '<div class="scan-preview">';
-        scannedItems.forEach(item => {
-          html += `<div class="scan-item"><span class="scan-item-type">🎬</span> ${item.title.substring(0, 30)}</div>`;
-        });
-        html += '</div>';
-      }
-
-      ui.scanResult.innerHTML = html;
-      ui.scanResult.style.display = 'block';
-
-      if (scannedItems.length > 0) {
-        ui.batchStepRun.style.display = 'block';
         ui.startBatchBtn.disabled = false;
         setStatus(`扫描完成！${scannedItems.length} 个条目 · 状态: ${statusLabel}`, false);
       } else {
@@ -786,7 +780,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     } catch (error) {
       setStatus(`扫描失败: ${error.message}`, true);
-      ui.scanResult.style.display = 'none';
+      ui.scanResultCard.style.display = 'none';
     } finally {
       ui.scanListBtn.disabled = false;
       ui.scanListBtn.textContent = '📋 扫描当前列表页';
@@ -839,14 +833,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     batchRunning = true;
     ui.startBatchBtn.disabled = true;
-    ui.startBatchBtn.textContent = '同步中...';
-    ui.batchProgress.style.display = 'block';
+    ui.startBatchBtn.querySelector('.sync-btn-label').textContent = '🔄 同步中...';
+    ui.syncProgressBar.style.width = '0%';
     ui.batchResults.style.display = 'none';
 
     // 预拉取全表记录，避免每条单独拉取
     let allRecords;
     try {
-      ui.progressText.textContent = '正在读取表格现有数据...';
       allRecords = await sendMessageToBackground('getAllRecords', {
         appId: settings.appId, appSecret: settings.appSecret, appToken: settings.appToken, tableId
       });
@@ -854,7 +847,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       setStatus(`读取表格数据失败: ${e.message}`, true);
       batchRunning = false;
       ui.startBatchBtn.disabled = false;
-      ui.startBatchBtn.textContent = '🚀 开始批量同步';
+      ui.startBatchBtn.querySelector('.sync-btn-label').textContent = '🚀 开始批量同步';
+      ui.syncProgressBar.style.width = '0%';
       return;
     }
 
@@ -866,8 +860,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const batch = scannedItems.slice(i, Math.min(i + CONCURRENT, total));
       const batchUpdated = Math.min(i + CONCURRENT, total);
       const percent = Math.round((batchUpdated / total) * 100);
-      ui.progressFill.style.width = percent + '%';
-      ui.progressText.textContent = `正在处理 ${batchUpdated}/${total} (并发)...`;
+      ui.syncProgressBar.style.width = percent + '%';
+      ui.startBatchBtn.querySelector('.sync-btn-label').textContent = `🔄 同步中 ${batchUpdated}/${total}`;
 
       const batchResults = await Promise.allSettled(
         batch.map(async (item) => {
@@ -912,6 +906,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const skipped = results.filter(r => r.action === 'skipped');
     const failed = results.filter(r => r.action === 'failed');
 
+    // 显示详细结果
     ui.resultsSummary.innerHTML = `
       <div class="summary-box">
         <div class="summary-item summary-added">✅ 新增: ${added.length}</div>
@@ -920,30 +915,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="summary-item summary-failed">❌ 失败: ${failed.length}</div>
       </div>
     `;
-
-    let listHtml = '';
-    if (failed.length > 0) {
-      listHtml += '<div class="results-section"><strong>失败条目:</strong>';
-      failed.forEach(r => {
-        listHtml += `<div class="result-item result-failed"><span>❌</span> <a href="${r.url}" target="_blank">${r.title.substring(0, 20)}</a> - ${r.reason}</div>`;
-      });
-      listHtml += '</div>';
-    }
-    if (updated.length > 0) {
-      listHtml += '<div class="results-section"><strong>更新详情:</strong>';
-      updated.forEach(r => {
-        listHtml += `<div class="result-item result-updated"><span>🔄</span> ${r.title.substring(0, 20)} - ${r.reason}</div>`;
-      });
-      listHtml += '</div>';
-    }
-    ui.resultsList.innerHTML = listHtml;
     ui.batchResults.style.display = 'block';
 
-    setStatus(`批量同步完成！新增 ${added.length}，更新 ${updated.length}，跳过 ${skipped.length}，失败 ${failed.length}`, failed.length > 0);
+    const sumText = `同步完成！新增 ${added.length}，更新 ${updated.length}，跳过 ${skipped.length}` + (failed.length > 0 ? `，失败 ${failed.length}` : '');
+    setStatus(sumText, failed.length > 0);
 
     batchRunning = false;
     ui.startBatchBtn.disabled = true;
-    ui.startBatchBtn.textContent = '✅ 同步完成';
+    ui.syncProgressBar.style.width = '100%';
+    ui.startBatchBtn.querySelector('.sync-btn-label').textContent = '✅ 同步完成';
   }
 
   async function loadCompletenessFieldCheckboxes() {

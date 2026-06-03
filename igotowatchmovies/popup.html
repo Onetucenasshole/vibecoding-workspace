@@ -15,7 +15,7 @@
     </div>
     <div class="top-bar-right">
       <button id="themeToggle" class="theme-toggle" title="切换主题">🌙</button>
-      <span class="app-version" id="appVersion">v1.8.1</span>
+      <span class="app-version" id="appVersion">v1.8.3</span>
     </div>
   </div>
 
@@ -52,26 +52,26 @@
         <p class="batch-desc">请先在浏览器中打开豆瓣个人列表页（看过/想看/在看），再点击扫描。其他链接不支持。</p>
       </div>
 
-      <div class="batch-step" id="batch-step-scan">
-        <button id="scanListBtn" class="btn-primary">📋 扫描当前列表页</button>
-        <div id="scanResult" class="scan-result" style="display:none;"></div>
+      <!-- 扫描按钮（普通按钮） -->
+      <button id="scanListBtn" class="btn-primary">📋 扫描当前列表页</button>
+
+      <!-- 红色框：扫描结果固定卡片 -->
+      <div id="scanResultCard" class="scan-result-card" style="display:none;">
+        <div class="scan-card-header" id="scanCardHeader"></div>
+        <div class="scan-card-body" id="scanCardBody"></div>
       </div>
 
-      <div class="batch-step" id="batch-step-run" style="display:none;">
-        <button id="startBatchBtn" class="btn-primary" disabled>🚀 开始批量同步</button>
-
-        <div id="batchProgress" class="batch-progress" style="display:none;">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-text" id="progressText"></div>
-        </div>
-
-        <div id="batchResults" class="batch-results" style="display:none;">
-          <div class="results-summary" id="resultsSummary"></div>
-          <div class="results-list" id="resultsList"></div>
-        </div>
+      <!-- 批量结果详情（更新/失败等） -->
+      <div id="batchResults" class="batch-results" style="display:none;">
+        <div class="results-summary" id="resultsSummary"></div>
+        <div class="results-list" id="resultsList"></div>
       </div>
+
+      <!-- 同步按钮（集成进度条） -->
+      <button id="startBatchBtn" class="btn-primary sync-progress-btn" disabled>
+        <span class="sync-btn-label">🚀 开始批量同步</span>
+        <span class="sync-progress-bar" id="syncProgressBar"></span>
+      </button>
     </div>
 
     <!-- 设置面板 -->

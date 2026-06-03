@@ -504,19 +504,96 @@ input::placeholder {
 }
 
 /* ========== Batch Panel ========== */
+/* 批量面板撑满高度 */
+#panel-batch.active {
+  height: 100%;
+  overflow: hidden;
+  gap: 8px;
+}
+
 .batch-header {
-  margin-bottom: 2px;
+  flex-shrink: 0;
 }
 .batch-desc {
   font-size: 11px;
   color: var(--text-secondary);
   line-height: 1.5;
 }
-.batch-step {
+
+/* ---- 扫描结果固定卡片（红色框） ---- */
+.scan-result-card {
+  flex: 1 1 0;
+  min-height: 120px;
+  max-height: 220px;
+  background: var(--bg-glass);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  box-shadow: 0 0 12px rgba(77, 139, 255, 0.08);
 }
+.scan-card-header {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-glow);
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.5;
+}
+.scan-card-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  padding: 4px 12px;
+}
+.scan-card-body .scan-item {
+  font-size: 11px;
+  color: var(--text-primary);
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--border-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- 批量结果详情 ---- */
+.batch-results {
+  flex-shrink: 0;
+  padding: 8px 10px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 10px;
+}
+
+/* ---- 同步按钮集成进度条 ---- */
+.sync-progress-btn {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.sync-btn-label {
+  position: relative;
+  z-index: 2;
+}
+.sync-progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(0, 214, 143, 0.35), rgba(77, 139, 255, 0.35));
+  z-index: 1;
+  transition: width 0.3s ease;
+}
+
+/* ---- 旧兼容样式（保留可能被引用的） ---- */
 .batch-config {
   display: flex;
   gap: 12px;
@@ -573,55 +650,8 @@ input::placeholder {
 }
 
 /* Scan / Results */
-.scan-result {
-  margin-top: 8px;
-  padding: 12px;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  max-height: 340px;
-  overflow-y: auto;
-}
-.scan-success {
-  font-size: 13px;
-  color: var(--success);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-.scan-hint {
-  font-size: 10px;
-  color: var(--warning);
-}
-.scan-preview {
-  margin-top: 4px;
-}
-.scan-item {
-  font-size: 11px;
-  color: var(--text-primary);
-  padding: 3px 0;
-  border-bottom: 1px dotted var(--border-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.scan-more {
-  font-size: 10px;
-  color: var(--text-disabled);
-  padding-top: 4px;
-  text-align: center;
-}
-
-.batch-results {
-  margin-top: 8px;
-  padding: 12px;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  max-height: 400px;
-  overflow-y: auto;
-}
-.results-summary {
-  margin-bottom: 8px;
+/* ---- 旧兼容样式（保留可能被引用的） ---- */
+.batch-config {
 }
 .summary-box {
   display: flex;

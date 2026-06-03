@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "IGOTOWATCHMOVIES",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "豆瓣电影/图书一键同步至飞书多维表格（支持TMDB封面、批量同步、智能去重）",
   "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest"],
   "host_permissions": [
