@@ -2,7 +2,7 @@
 
 > 豆瓣电影/图书一键同步至飞书多维表格的 Chrome 浏览器扩展
 
-[![Version](https://img.shields.io/badge/version-1.8.1-blue)](https://github.com/leidichen/douban-to-feishu)
+[![Version](https://img.shields.io/badge/version-1.8.1-blue)](https://github.com/Onetucenasshole/vibecoding-workspace)
 [![Manifest](https://img.shields.io/badge/manifest-v3-green)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
@@ -21,14 +21,14 @@
 ### 支持同步的字段
 
 基本信息、导演/编剧/主演、类型、制片国家、语言、上映日期、片长、
-IMDb、豆瓣评分、评分人数、个人评分、打分日期、短评、种类
+IMDb、豆瓣评分、评分人数、个人评分、打分日期、短评、种类、进度状态
 
 ## 📦 安装
 
 1. 打开 Chrome 浏览器 → `chrome://extensions/`
 2. 开启右上角「开发者模式」
 3. 点击「加载已解压的扩展程序」
-4. 选择本插件目录
+4. 选择插件目录
 5. 插件图标出现在工具栏
 
 ## ⚙️ 飞书配置
@@ -57,13 +57,15 @@ IMDb、豆瓣评分、评分人数、个人评分、打分日期、短评、种�
 | 打分日期 | 日期 | |
 | 我的短评 | 文本 | |
 | 种类 | 多选 | 选项：电影、电视剧、动漫 |
+| 进度状态 | 单选 | 选项：已看完、想看、正在看 |
 
 ### 3. 在插件中配置
 
 1. 点击插件图标 → **设置** tab
 2. 填入 App ID、App Secret
-3. 粘贴飞书表格完整链接（自动提取 App Token 和 Table ID）
-4. 点击「验证连接」
+3. 粘贴「单条导入表格」飞书链接 → 单条同步写入此表
+4. 粘贴「批量导入表格」飞书链接 → 批量同步写入此表（两个表可相同可不同）
+5. 点击「验证连接」
 
 ### 4. TMDB 封面（可选）
 
@@ -79,8 +81,9 @@ IMDb、豆瓣评分、评分人数、个人评分、打分日期、短评、种�
 
 ### 批量同步
 
-1. 打开豆瓣个人列表页（如 `movie.douban.com/people/xxx/collect`）
+1. 在浏览器中打开豆瓣个人列表页（仅支持 `movie.douban.com/people/xxx/collect|wish|do`）
 2. 点击插件图标 → **批量** tab → 扫描 → 开始批量同步
+3. 自动根据链接识别进度状态：`/collect`→已看完、`/wish`→想看、`/do`→正在看
 
 ## 🛠️ 技术栈
 
