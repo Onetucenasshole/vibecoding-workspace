@@ -9,8 +9,8 @@ const getDoubanId = () => {
 
 const isListPage = () => {
   const url = window.location.href;
-  // 仅支持个人列表页：看过/想看/在看
-  return /\/people\/\d+\/(collect|wish|do)/.test(url) && !/\/subject\//.test(url);
+  // 仅支持个人列表页：看过/想看/在看（数字ID和字母用户名都支持）
+  return /\/people\/[^/]+\/(collect|wish|do)/.test(url) && !/\/subject\//.test(url);
 };
 
 const getListItems = () => {

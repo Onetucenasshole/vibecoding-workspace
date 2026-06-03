@@ -741,8 +741,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       const currentUrl = tab.url;
 
-      // 必须是 /people/xxx/collect|wish|do 格式
-      const urlMatch = currentUrl.match(/\/people\/\d+\/(collect|wish|do)/);
+      // 必须是 /people/xxx/collect|wish|do 格式（数字ID和字母用户名都支持）
+      const urlMatch = currentUrl.match(/\/people\/[^/]+\/(collect|wish|do)/);
       if (!urlMatch) {
         setStatus('请打开正确的豆瓣个人列表页（/people/xxx/collect|wish|do）', true);
         ui.scanListBtn.disabled = false;
