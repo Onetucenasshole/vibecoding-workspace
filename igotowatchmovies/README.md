@@ -2,7 +2,7 @@
 
 > 豆瓣电影/图书一键同步至飞书多维表格的 Chrome 浏览器扩展
 
-[![Version](https://img.shields.io/badge/version-1.8.1-blue)](https://github.com/leidichen/douban-to-feishu)
+[![Version](https://img.shields.io/badge/version-1.8.2-blue)](https://github.com/Onetucenasshole/vibecoding-workspace)
 [![Manifest](https://img.shields.io/badge/manifest-v3-green)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
