@@ -579,7 +579,7 @@ input::placeholder {
   background: var(--bg-glass);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  max-height: 200px;
+  max-height: 340px;
   overflow-y: auto;
 }
 .scan-success {
@@ -617,7 +617,7 @@ input::placeholder {
   background: var(--bg-glass);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  max-height: 260px;
+  max-height: 400px;
   overflow-y: auto;
 }
 .results-summary {

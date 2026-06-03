@@ -768,10 +768,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (scannedItems.length > 0) {
         html += '<div class="scan-preview">';
-        scannedItems.slice(0, 5).forEach(item => {
+        scannedItems.forEach(item => {
           html += `<div class="scan-item"><span class="scan-item-type">🎬</span> ${item.title.substring(0, 30)}</div>`;
         });
-        if (scannedItems.length > 5) html += `<div class="scan-more">...还有 ${scannedItems.length - 5} 条</div>`;
         html += '</div>';
       }
 
@@ -932,10 +931,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (updated.length > 0) {
       listHtml += '<div class="results-section"><strong>更新详情:</strong>';
-      updated.slice(0, 10).forEach(r => {
+      updated.forEach(r => {
         listHtml += `<div class="result-item result-updated"><span>🔄</span> ${r.title.substring(0, 20)} - ${r.reason}</div>`;
       });
-      if (updated.length > 10) listHtml += `<div class="result-item">...还有 ${updated.length - 10} 条</div>`;
       listHtml += '</div>';
     }
     ui.resultsList.innerHTML = listHtml;
