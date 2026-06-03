@@ -865,40 +865,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const results = [];
     const total = scannedItems.length;
+    const CONCURRENT = 3; // 一次并发3条
 
-    for (let i = 0; i < total; i++) {
-      const item = scannedItems[i];
-      const percent = Math.round(((i + 1) / total) * 100);
+    for (let i = 0; i < total; i += CONCURRENT) {
+      const batch = scannedItems.slice(i, Math.min(i + CONCURRENT, total));
+      const batchUpdated = Math.min(i + CONCURRENT, total);
+      const percent = Math.round((batchUpdated / total) * 100);
       ui.progressFill.style.width = percent + '%';
-      ui.progressText.textContent = `正在处理 ${i + 1}/${total}: ${item.title.substring(0, 25)}...`;
+      ui.progressText.textContent = `正在处理 ${batchUpdated}/${total} (并发)...`;
 
-      try {
-        const result = await sendMessageToBackground('batchSyncItem', {
-          appId: settings.appId,
-          appSecret: settings.appSecret,
-          appToken: settings.appToken,
-          tableId,
-          item,
-          feishuFields,
-          allRecords,
-          requiredFields,
-          equalStrategy,
-          movieMapping,
-          bookMapping,
-          tmdbApiKey: settings.tmdbApiKey
-        });
-        results.push(result);
-      } catch (e) {
-        results.push({
-          doubanId: item.doubanId,
-          title: item.title,
-          url: item.url,
-          action: 'failed',
-          reason: e.message
-        });
+      const batchResults = await Promise.allSettled(
+        batch.map(async (item) => {
+          try {
+            return await sendMessageToBackground('batchSyncItem', {
+              appId: settings.appId,
+              appSecret: settings.appSecret,
+              appToken: settings.appToken,
+              tableId,
+              item,
+              feishuFields,
+              allRecords,
+              requiredFields,
+              equalStrategy,
+              movieMapping,
+              bookMapping,
+              tmdbApiKey: settings.tmdbApiKey
+            });
+          } catch (e) {
+            return {
+              doubanId: item.doubanId,
+              title: item.title,
+              url: item.url,
+              action: 'failed',
+              reason: e.message
+            };
+          }
+        })
+      );
+      for (const r of batchResults) {
+        results.push(r.status === 'fulfilled' ? r.value : r.reason || { action: 'failed', reason: 'Unknown error' });
       }
 
-      if (i < total - 1) {
+      // 批次间短暂延迟
+      if (i + CONCURRENT < total) {
         await new Promise(r => setTimeout(r, rateLimit * 1000));
       }
     }
