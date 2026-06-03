@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (batchRunning) return;
 
     const settings = await getSettings();
-    const equalStrategy = ui.equalStrategy.value || 'keep_old';
+    const equalStrategy = 'new_priority';
 
     const type = scannedItems[0]?.type || 'movie';
     // 批量同步使用独立的批量导入表格
