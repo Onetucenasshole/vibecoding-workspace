@@ -25,7 +25,7 @@ async function searchTmdbPoster({ tmdbApiKey, title, year }) {
   if (year) url += `&primary_release_year=${year}`;
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 4000);  // 缩小超时 8s→4s
   try {
     const r = await fetch(url, { signal: controller.signal });
     clearTimeout(timeout);

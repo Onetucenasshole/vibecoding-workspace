@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (ui.batchMovieTableUrlInput) ui.batchMovieTableUrlInput.value = data.batchMovieTableUrl || '';
     ui.bookTableUrlInput.value = data.bookTableUrl || '';
     if (ui.tmdbApiKeyInput) ui.tmdbApiKeyInput.value = data.tmdbApiKey || '';
-    if (ui.rateLimit) ui.rateLimit.value = data.rateLimit || '1';
+    if (ui.rateLimit) ui.rateLimit.value = data.rateLimit || '0.5';
     if (ui.equalStrategy) ui.equalStrategy.value = data.equalStrategy || 'keep_old';
     if (data.requiredFieldsMovie) {
       ui.requiredFieldsMovieCached = data.requiredFieldsMovie;
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       movieTableId: movieInfo ? movieInfo.tableId : '',
       batchMovieTableId: batchMovieInfo ? batchMovieInfo.tableId : '',
       bookTableId: bookInfo ? bookInfo.tableId : '',
-      rateLimit: ui.rateLimit ? parseFloat(ui.rateLimit.value) || 1 : 1,
+      rateLimit: ui.rateLimit ? parseFloat(ui.rateLimit.value) || 0.5 : 0.5,
       equalStrategy: ui.equalStrategy ? ui.equalStrategy.value : 'keep_old'
     };
 
@@ -805,7 +805,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (batchRunning) return;
 
     const settings = await getSettings();
-    const rateLimit = parseFloat(ui.rateLimit.value) || 1;
+    const rateLimit = parseFloat(ui.rateLimit.value) || 0.5;
     const equalStrategy = ui.equalStrategy.value || 'keep_old';
 
     const type = scannedItems[0]?.type || 'movie';
